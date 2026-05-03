@@ -1,1 +1,38 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ezee_app
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://app:app@db:5432/ezee_garden
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
+  db:
+    image: postgis/postgis:16-3.4
+    container_name: ezee_db
+    environment:
+      POSTGRES_DB: ezee_garden
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d ezee_garden"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres_data:

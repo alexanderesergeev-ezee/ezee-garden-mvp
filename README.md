@@ -1,51 +1,87 @@
 # ezee-garden-mvp
 
-Репозиторий планирования MVP для практичного продукта управления садом с фокусом на Московский регион / центральную Россию.
+Репозиторий MVP для продукта управления садом с фокусом на Московский регион / центральную Россию.
 
-## Что это за проект
-Это концепция Python-first веб-продукта, который помогает владельцам частных участков и дач:
-- наносить на карту участок и садовые зоны,
-- вести простой паспорт участка,
-- проверять пригодность растений,
-- управлять еженедельными задачами,
-- вести легкий садовый журнал.
+## Что уже реализовано (M0 scaffolding)
+- Минимальное FastAPI-приложение с entrypoint `app/main.py`.
+- Web-роут `/` на Jinja2 templates.
+- API health endpoint `GET /api/health`.
+- Базовый шаблон и простая главная страница.
+- Leaflet-карта в демо-режиме (минимальный JavaScript).
+- Docker Compose для `app` + `db` (PostgreSQL + PostGIS).
+- Базовый тест на health endpoint (`pytest`).
+- Настроены `ruff` и зависимости через `pyproject.toml`.
 
-## Текущий статус
-Сейчас репозиторий находится на этапе **планирования MVP + определения scaffolding**.
-Полноценный production application code на этом этапе не ожидается.
-
-## Документы по продукту и scope
-- Vision: [`docs/vision.md`](docs/vision.md)
-- MVP PRD: [`docs/prd-mvp.md`](docs/prd-mvp.md)
-- System requirements: [`docs/system-requirements.md`](docs/system-requirements.md)
-- Milestones/backlog: [`docs/backlog.md`](docs/backlog.md)
-
-## Планируемый стек MVP
+## Текущий стек
 - FastAPI
 - Jinja2 templates
-- Leaflet (взаимодействие с картой)
+- минимальный JavaScript
+- Leaflet
 - PostgreSQL + PostGIS
 - Docker Compose
+- pytest
+- ruff
 
-## Жесткие ограничения
-- Только MVP scope (держим проект простым и посильным для одного основателя).
-- Без satellite-based plant recognition.
-- Без заявлений о точной глубине groundwater.
+## Структура проекта
+```text
+.
+├── app/
+│   ├── main.py
+│   ├── web/
+│   ├── api/
+│   ├── templates/
+│   ├── static/
+│   ├── domain/
+│   │   ├── models/
+│   │   ├── services/
+│   │   └── rules/
+│   ├── adapters/
+│   └── db/
+├── docs/
+├── tests/
+├── docker-compose.yml
+├── Dockerfile
+├── pyproject.toml
+└── .env.example
+```
 
-## Планируемая последовательность milestones
-1. **M0** docs + scaffolding
-2. **M1** site + zones
-3. **M2** passport + plant suitability
-4. **M3** weekly tasks + journal
-5. **M4** external data adapters
+## Быстрый запуск
+1. Создайте `.env` из примера:
+   ```bash
+   cp .env.example .env
+   ```
+2. Запустите контейнеры:
+   ```bash
+   docker compose up --build
+   ```
+3. Откройте приложение:
+   - Главная страница: http://localhost:8000/
+   - Health: http://localhost:8000/api/health
 
-Подробные критерии см. в `docs/backlog.md`.
+## Локальный запуск без Docker
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -e .[dev]
+uvicorn app.main:app --reload
+```
 
-## Структура репозитория (план)
-Каноничное описание структуры и архитектуры см. в `docs/system-requirements.md`.
+## Проверки
+```bash
+ruff check .
+pytest
+```
 
-## Быстрый старт для contributors (сейчас)
-1. Прочитайте `AGENTS.md` и документы в `docs/`.
-2. Соотносите любую задачу с текущим milestone scope.
-3. Предпочитайте маленькие, проверяемые итерации с явными acceptance criteria.
+## Документация
+- Правила работы: `AGENTS.md`
+- Vision: `docs/vision.md`
+- PRD: `docs/prd-mvp.md`
+- System requirements: `docs/system-requirements.md`
+- Backlog: `docs/backlog.md`
 
+## Ограничения текущего этапа
+- Без authentication.
+- Без внешних API.
+- Без plant suitability.
+- Без geodata adapters.
+- Без сложного frontend framework.

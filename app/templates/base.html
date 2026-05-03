@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ title or "ezee-garden-mvp" }}</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}" />
+  </head>
+  <body>
+    <header>
+      <h1>ezee-garden-mvp</h1>
+      <p>Минимальный каркас MVP на FastAPI + Jinja2 + Leaflet.</p>
+    </header>
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="{{ url_for('static', path='/main.js') }}"></script>
+  </body>
+</html>
